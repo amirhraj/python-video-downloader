@@ -322,7 +322,7 @@ This project is licensed under the MIT License.
 
 See the `LICENSE` file for details.
 
-## Описание (русский язык)
+## Описание
 
 Этот проект представляет собой универсальный загрузчик видео, построенный на основе `yt-dlp`, `FFmpeg`, `Node.js` и `Docker`.
 В образовательных целях
