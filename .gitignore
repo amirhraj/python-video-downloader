@@ -1,0 +1,11 @@
+./downloads
+./text.txt
+text.txt
+downloads
+./downloads/*
+./text.txt/*
+downloads/
+text.txt/
+__pycache__/
+*.pyc
+venv/
