@@ -176,47 +176,6 @@ You can also rebuild and run with one command:
 docker compose run --rm --build downloader "VIDEO_URL"
 ```
 
----
-
-## Project Structure
-
-```text
-Python-Video-Downloader/
-├── downloads/
-├── .dockerignore
-├── .gitignore
-├── compose.yaml
-├── Dockerfile
-├── LICENSE
-├── README.md
-├── requirements.txt
-└── downloader.py
-```
-
----
-
-## Docker Compose Configuration
-
-The `compose.yaml` file builds the project image and mounts the local `downloads` directory into the container.
-
-Example:
-
-```yaml
-services:
-  downloader:
-    build:
-      context: .
-      dockerfile: Dockerfile
-
-    image: python-video-downloader:latest
-
-    volumes:
-      - ./downloads:/app/downloads
-
-    working_dir: /app
-
-    restart: "no"
-```
 
 ---
 
@@ -266,15 +225,6 @@ check that:
 * The video is available in your region
 * The video does not require account authorization
 
----
-
-### Permission denied when cloning with SSH
-
-If SSH is not configured for GitHub, clone the repository using HTTPS:
-
-```bash
-git clone https://github.com/amirhraj/Python-Video-Downloader.git
-```
 
 ---
 
