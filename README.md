@@ -11,6 +11,8 @@ The project can download:
 
 Downloaded files are saved to the local `downloads` directory.
 
+
+
 ---
 
 ## Features
@@ -43,6 +45,8 @@ docker --version
 docker compose version
 ```
 
+
+
 ---
 
 ## Installation
@@ -71,6 +75,8 @@ On Windows PowerShell, you can use:
 New-Item -ItemType Directory -Force downloads
 ```
 
+
+
 ---
 
 ## Build the Docker Image
@@ -91,6 +97,8 @@ Docker will install all required dependencies inside the image:
 
 The first build may take longer because Docker needs to download and install the required packages.
 
+
+
 ---
 
 ## Usage
@@ -107,6 +115,8 @@ Example:
 docker compose run --rm downloader "https://www.youtube.com/watch?v=5ltsySR5h9I"
 ```
 
+
+
 ---
 
 ### Download a YouTube Shorts video
@@ -114,6 +124,8 @@ docker compose run --rm downloader "https://www.youtube.com/watch?v=5ltsySR5h9I"
 ```bash
 docker compose run --rm downloader "https://www.youtube.com/shorts/VIDEO_ID"
 ```
+
+
 
 ---
 
@@ -124,6 +136,8 @@ Use the direct `.m3u8` URL:
 ```bash
 docker compose run --rm downloader "https://example.com/video/master.m3u8"
 ```
+
+
 
 ---
 
@@ -142,6 +156,8 @@ docker compose run --rm downloader `
   "https://www.youtube.com/watch?v=VIDEO_ID"
 ```
 
+
+
 ---
 
 ## Downloaded Files
@@ -159,6 +175,8 @@ C:\Users\YourName\Desktop\Python-Video-Downloader\downloads
 ```
 
 The `downloads` directory is mounted from your computer into the Docker container, so downloaded files remain available after the container stops.
+
+
 
 ---
 
@@ -182,6 +200,8 @@ Rebuild the image without using Docker cache:
 docker compose build --no-cache
 ```
 
+
+
 ---
 
 ## Troubleshooting
@@ -189,6 +209,8 @@ docker compose build --no-cache
 ### Docker is not running
 
 If you see an error related to the Docker daemon or Docker engine, start Docker Desktop and run the command again.
+
+
 
 ---
 
@@ -209,7 +231,10 @@ check that:
 * The video does not require account authorization
 
 
+
 ---
+
+
 
 ### Rebuild the image
 
@@ -225,6 +250,8 @@ Then run the downloader again:
 docker compose run --rm downloader "VIDEO_URL"
 ```
 
+
+
 ---
 
 ## Updating yt-dlp
@@ -237,7 +264,9 @@ To install the latest available version, rebuild without cache:
 docker compose build --no-cache
 ```
 
+
 ---
+
 
 ## Legal Notice
 
@@ -249,11 +278,17 @@ This project does not bypass DRM protection.
 
 ---
 
+
 ## License
 
 This project is licensed under the MIT License.
 
 See the `LICENSE` file for details.
+
+
+
+
+---
 
 
 # Описание
