@@ -2,28 +2,29 @@ import os
 import sys
 from yt_dlp import YoutubeDL
 
-def try_download(url: str, output_dir: str = "downloads"):
+def try_download(url: str, output_dir: str = "/app/downloads"):
     os.makedirs(output_dir, exist_ok=True)
 
     common_opts = {
-        "outtmpl": os.path.join(output_dir, "%(title)s.%(ext)s"),
-        "merge_output_format": "mp4",
-        "format": "bestvideo*+bestaudio/best",
-        "noplaylist": True,
-        "retries": 10,
-        "js_runtimes": {
-            "node": {
-                "path": r"C:\Program Files\nodejs\node.exe"
-            }
-        },
-        "fragment_retries": 10,
-        "quiet": False,
-        "no_warnings": False,
-        "progress_with_newline": True,
-        "verbose": True,
+    "outtmpl": os.path.join(output_dir, "%(title)s.%(ext)s"),
+    "merge_output_format": "mp4",
+    "format": "bestvideo*+bestaudio/best",
+    "noplaylist": True,
+    "retries": 10,
+    "fragment_retries": 10,
+    "quiet": False,
+    "no_warnings": False,
+    "progress_with_newline": True,
+    "verbose": True,
 
-        # УКАЖИ СВОЙ РЕАЛЬНЫЙ ПУТЬ:
-         "ffmpeg_location": r"B:\ffmpeg-8.1-essentials_build\ffmpeg-8.1-essentials_build\bin\ffmpeg.exe",
+    "js_runtimes": {
+        "node": {
+            "path": "/usr/local/bin/node",
+        }
+    },
+
+    "remote_components": {"ejs:github"},
+    "ffmpeg_location": "/usr/bin",
     }
 
     format_variants = [
