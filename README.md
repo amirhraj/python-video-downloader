@@ -162,23 +162,6 @@ The `downloads` directory is mounted from your computer into the Docker containe
 
 ---
 
-## Rebuild After Code Changes
-
-If you change `downloader.py`, `requirements.txt`, or the Docker configuration, rebuild the image:
-
-```bash
-docker compose build
-```
-
-You can also rebuild and run with one command:
-
-```bash
-docker compose run --rm --build downloader "VIDEO_URL"
-```
-
-
----
-
 ## Stop and Clean Up
 
 Remove stopped project containers:
