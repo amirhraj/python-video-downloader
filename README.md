@@ -1,33 +1,47 @@
 # Python Video Downloader
 
-A simple Python-based video downloader built with `yt-dlp` and `ffmpeg`.
+A simple command-line video downloader built with Python, `yt-dlp`, FFmpeg, Node.js, and Docker Compose.
 
-The project supports downloading media from YouTube and other websites supported by `yt-dlp`, including HLS (`.m3u8`) streams.
+The project can download:
+
+* YouTube videos
+* YouTube Shorts
+* HLS streams using `.m3u8` links
+* Media from other websites supported by `yt-dlp`
+
+Downloaded files are saved to the local `downloads` directory.
 
 ---
 
 ## Features
 
-- Download videos from YouTube.
-- Download HLS (`.m3u8`) streams.
-- Merge video and audio streams automatically.
-- Retry failed downloads.
-- Support for `ffmpeg`.
-- Support for JavaScript challenges through Node.js.
-- Support for browser cookies.
-- Detailed logging output.
+* Downloads video and audio in the best available quality
+* Automatically merges separate video and audio streams
+* Supports YouTube and other websites supported by `yt-dlp`
+* Supports HLS `.m3u8` streams
+* Uses FFmpeg for media processing
+* Uses Node.js for YouTube JavaScript challenges
+* Retries failed downloads
+* Runs inside Docker
+* Does not require local Python, FFmpeg, Node.js, or `yt-dlp` installation
 
 ---
 
 ## Requirements
 
-Before using the script, install the following software:
+You only need to install:
 
-- Python 3.12+
-- FFmpeg
-- Node.js 22+
-- yt-dlp
-- yt-dlp-ejs
+* Git
+* Docker Desktop
+
+Docker Desktop must be running before you build or run the project.
+
+Check that Docker is installed:
+
+```bash
+docker --version
+docker compose version
+```
 
 ---
 
@@ -36,101 +50,338 @@ Before using the script, install the following software:
 Clone the repository:
 
 ```bash
-git clone git@github.com:amirhraj/python-video-downloader.git
-cd python-video-downloader
-
+git clone git@github.com:amirhraj/Python-Video-Downloader.git
 ```
 
-Install Python dependencies:
+Open the project directory:
 
 ```bash
-pip install -r requirements.txt
+cd Python-Video-Downloader
+```
+
+Create the downloads directory if it does not exist:
+
+```bash
+mkdir downloads
+```
+
+On Windows PowerShell, you can use:
+
+```powershell
+New-Item -ItemType Directory -Force downloads
 ```
 
 ---
 
-## Install FFmpeg
+## Build the Docker Image
 
-Download FFmpeg and extract it somewhere on your machine.
-
-Example:
-
-```text
-B:\ffmpeg\bin\ffmpeg.exe
-```
-
-Update the path inside the script:
-
-```python
-"ffmpeg_location": r"B:\ffmpeg\bin\ffmpeg.exe"
-```
-
----
-
-## Install Node.js
-
-Download and install the latest LTS version of Node.js.
-
-Verify the installation:
+Run:
 
 ```bash
-node --version
+docker compose build
 ```
+
+Docker will install all required dependencies inside the image:
+
+* Python
+* FFmpeg
+* Node.js
+* yt-dlp
+* yt-dlp-ejs
+
+The first build may take longer because Docker needs to download and install the required packages.
 
 ---
 
 ## Usage
 
-Download a YouTube video:
+### Download a YouTube video
 
 ```bash
-python downloader.py "https://www.youtube.com/watch?v=VIDEO_ID"
+docker compose run --rm downloader "https://www.youtube.com/watch?v=VIDEO_ID"
 ```
 
-Download a YouTube Shorts video:
+Example:
 
 ```bash
-python downloader.py "https://www.youtube.com/shorts/VIDEO_ID"
-```
-
-Download an HLS stream:
-
-```bash
-python downloader.py "https://example.com/master.m3u8"
+docker compose run --rm downloader "https://www.youtube.com/watch?v=5ltsySR5h9I"
 ```
 
 ---
 
-## Project structure
+### Download a YouTube Shorts video
+
+```bash
+docker compose run --rm downloader "https://www.youtube.com/shorts/VIDEO_ID"
+```
+
+---
+
+### Download an HLS stream
+
+Use the direct `.m3u8` URL:
+
+```bash
+docker compose run --rm downloader "https://example.com/video/master.m3u8"
+```
+
+---
+
+## Windows PowerShell
+
+You can run the command on one line:
+
+```powershell
+docker compose run --rm downloader "https://www.youtube.com/watch?v=VIDEO_ID"
+```
+
+Or split it into multiple lines:
+
+```powershell
+docker compose run --rm downloader `
+  "https://www.youtube.com/watch?v=VIDEO_ID"
+```
+
+---
+
+## Downloaded Files
+
+Downloaded files are saved to:
 
 ```text
-python-video-downloader/
-│
-├── downloads/
-├── downloader.py
-├── requirements.txt
-├── README.md
-└── .gitignore
+./downloads
 ```
+
+On Windows, the full path may look like:
+
+```text
+C:\Users\YourName\Desktop\Python-Video-Downloader\downloads
+```
+
+The `downloads` directory is mounted from your computer into the Docker container, so downloaded files remain available after the container stops.
 
 ---
 
-## Example
+## Rebuild After Code Changes
+
+If you change `downloader.py`, `requirements.txt`, or the Docker configuration, rebuild the image:
 
 ```bash
-python downloader.py "https://www.youtube.com/watch?v=5ltsySR5h9I"
+docker compose build
+```
+
+You can also rebuild and run with one command:
+
+```bash
+docker compose run --rm --build downloader "VIDEO_URL"
 ```
 
 ---
 
-## Disclaimer
+## Project Structure
 
-This project is intended for educational purposes only.
+```text
+Python-Video-Downloader/
+├── downloads/
+├── .dockerignore
+├── .gitignore
+├── compose.yaml
+├── Dockerfile
+├── LICENSE
+├── README.md
+├── requirements.txt
+└── downloader.py
+```
 
-Users are responsible for complying with the terms of service and copyright regulations of the websites they use.
+---
+
+## Docker Compose Configuration
+
+The `compose.yaml` file builds the project image and mounts the local `downloads` directory into the container.
+
+Example:
+
+```yaml
+services:
+  downloader:
+    build:
+      context: .
+      dockerfile: Dockerfile
+
+    image: python-video-downloader:latest
+
+    volumes:
+      - ./downloads:/app/downloads
+
+    working_dir: /app
+
+    restart: "no"
+```
+
+---
+
+## Stop and Clean Up
+
+Remove stopped project containers:
+
+```bash
+docker compose down
+```
+
+Remove the project image:
+
+```bash
+docker image rm python-video-downloader:latest
+```
+
+Rebuild the image without using Docker cache:
+
+```bash
+docker compose build --no-cache
+```
+
+---
+
+## Troubleshooting
+
+### Docker is not running
+
+If you see an error related to the Docker daemon or Docker engine, start Docker Desktop and run the command again.
+
+---
+
+### The video is unavailable
+
+If the downloader reports:
+
+```text
+This video is not available
+```
+
+check that:
+
+* The video opens in your browser
+* The video was not deleted
+* The video is not private
+* The video is available in your region
+* The video does not require account authorization
+
+---
+
+### Permission denied when cloning with SSH
+
+If SSH is not configured for GitHub, clone the repository using HTTPS:
+
+```bash
+git clone https://github.com/amirhraj/Python-Video-Downloader.git
+```
+
+---
+
+### Rebuild the image
+
+If dependencies are outdated or the container behaves incorrectly:
+
+```bash
+docker compose build --no-cache
+```
+
+Then run the downloader again:
+
+```bash
+docker compose run --rm downloader "VIDEO_URL"
+```
+
+---
+
+## Updating yt-dlp
+
+The Docker image contains the `yt-dlp` version installed during the build.
+
+To install the latest available version, rebuild without cache:
+
+```bash
+docker compose build --no-cache
+```
+
+---
+
+## Legal Notice
+
+This project is intended for educational and personal use.
+
+Only download media that you are legally allowed to access and save. Users are responsible for following copyright laws and the terms of service of the websites they use.
+
+This project does not bypass DRM protection.
 
 ---
 
 ## License
 
-MIT License
+This project is licensed under the MIT License.
+
+See the `LICENSE` file for details.
+
+## Описание (русский язык)
+
+Этот проект представляет собой универсальный загрузчик видео, построенный на основе `yt-dlp`, `FFmpeg`, `Node.js` и `Docker`.
+В образовательных целях
+
+С его помощью можно скачивать:
+
+* видео с ЮТУБ;
+* ЮТУБ Shorts;
+* HLS-потоки (`.m3u8`);
+* контент с других сайтов, поддерживаемых `yt-dlp`.
+
+Главная особенность проекта заключается в том, что пользователю не нужно отдельно устанавливать Python, FFmpeg, Node.js, `yt-dlp` и другие зависимости. Всё необходимое уже находится внутри Docker-контейнера.
+
+Для работы понадобятся только:
+
+* Docker Desktop;
+* Docker Compose;
+* Git.
+
+### Установка Docker
+
+Проверьте, установлен ли Docker:
+
+```bash
+docker --version
+docker compose version
+```
+
+Если команды успешно выполнились, значит, всё готово к работе.
+
+### Клонирование репозитория
+
+```bash
+git clone git@github.com:amirhraj/Python-Video-Downloader.git
+cd Python-Video-Downloader
+```
+
+### Сборка проекта
+
+```bash
+docker compose build
+```
+
+### Скачивание видео
+
+```bash
+docker compose run --rm downloader "VIDEO_URL"
+```
+
+Пример:
+
+```bash
+docker compose run --rm downloader "https://www.youtube.com/watch?v=5ltsySR5h9I"
+```
+
+### Скачивание HLS-потока
+
+```bash
+docker compose run --rm downloader "https://example.com/video/master.m3u8"
+```
+
+Все загруженные файлы автоматически сохраняются в каталог `downloads`.
