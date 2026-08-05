@@ -38,12 +38,13 @@ Clone the repository:
 ```bash
 git clone git@github.com:amirhraj/python-video-downloader.git
 cd python-video-downloader
+
 ```
 
 Install Python dependencies:
 
 ```bash
-pip install -U yt-dlp yt-dlp-ejs
+pip install -r requirements.txt
 ```
 
 ---
